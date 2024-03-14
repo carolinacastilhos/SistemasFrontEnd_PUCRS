@@ -1,19 +1,21 @@
-<h1 align="center"> Curso Análise e Desenvolvimento de Sistemas: Full-Stack e Mobile </br>
+ <h1 align="center"> Fase 1 Projeto Disciplina Desenvolvimento de Sistemas Frontend </h1>
+
+<h3 align="center">Curso Análise e Desenvolvimento de Sistemas: Full-Stack e Mobile </br>
 Universidade Pontifícia Católica do Rio Grande do Sul (PUCRS) </br>
-Projeto Disciplina Desenvolvimento de Sistemas Frontend </h1>
+Aluna: Carolina Castilhos da Silva </h3>
 
-## Fase 1 
-### Aluna: Carolina Castilhos da Silva
+### - Como executar o projeto
 
-### Como executar o projeto
-Para executar o projeto, deve-se entrar no Prompt de Comando dentro da pasta do 
-projeto (hotwheels) e executar a sequência de comandos abaixo: 
+Para executar o projeto, deve-se entrar no Prompt de Comando dentro da pasta do
+projeto (hotwheels) e executar a sequência de comandos abaixo:
+
 1. npm install
 2. npm install react-router-dom
 3. npm start
-Desta forma, o projeto será executado e poderá ser visualizado no navegador.
+   Desta forma, o projeto será executado e poderá ser visualizado no navegador.
 
-### Componentes
+### - Componentes
+
 Atualmente, o projeto é composto por 7 componentes:
 
 1. About: este componente é responsável pela página “Sobre” da aplicação,

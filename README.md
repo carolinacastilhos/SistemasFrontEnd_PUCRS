@@ -2,7 +2,6 @@
 Universidade Pontifícia Católica do Rio Grande do Sul (PUCRS)
 Projeto Disciplina Desenvolvimento de Sistemas Frontend </h1>
 
-<hr/> 
 <h2 align="center">Fase 1</h2> 
 <h3>Aluna: Carolina Castilhos da Silva</h3>
 

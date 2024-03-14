@@ -1,11 +1,11 @@
-<h1 align="center"> Curso Análise e Desenvolvimento de Sistemas: Full-Stack e Mobile
-Universidade Pontifícia Católica do Rio Grande do Sul (PUCRS)
+<h1 align="center"> Curso Análise e Desenvolvimento de Sistemas: Full-Stack e Mobile </br>
+Universidade Pontifícia Católica do Rio Grande do Sul (PUCRS) </br>
 Projeto Disciplina Desenvolvimento de Sistemas Frontend </h1>
 
-<h2 align="center">Fase 1</h2> 
-<h3>Aluna: Carolina Castilhos da Silva</h3>
+## Fase 1 
+### Aluna: Carolina Castilhos da Silva
 
-<h3>Como executar o projeto</h3>
+### Como executar o projeto
 Para executar o projeto, deve-se entrar no Prompt de Comando dentro da pasta do 
 projeto (hotwheels) e executar a sequência de comandos abaixo: 
 1. npm install
@@ -13,7 +13,7 @@ projeto (hotwheels) e executar a sequência de comandos abaixo:
 3. npm start
 Desta forma, o projeto será executado e poderá ser visualizado no navegador.
 
-<h3>Componentes</h3>
+### Componentes
 Atualmente, o projeto é composto por 7 componentes:
 
 1. About: este componente é responsável pela página “Sobre” da aplicação,

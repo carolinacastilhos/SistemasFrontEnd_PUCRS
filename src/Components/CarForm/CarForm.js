@@ -13,11 +13,19 @@ const CarForm = () => {
   const [newColor, setNewColor] = useState("");
   const [editingCar, setEditingCar] = useState(null);
   const [isOpen, setIsOpen] = useState(false); // Estado para controlar a abertura do pop-up de edição
+  const [errorMsg, setErrorMsg] = useState(""); // Estado para controlar a mensagem de validação
 
   function addCar() {
     // Verificação se todos os campos estão preenchidos antes de adicionar o carro
     if (!newName || !newBrand || !newYear || !newColor) {
-      alert("Por favor, preencha todos os campos antes de adicionar um carro.");
+      setErrorMsg(
+        "Por favor, preencha todos os campos antes de adicionar um carro."
+      );
+      return;
+    }
+
+    if (!/^\d{4}$/.test(newYear)) {
+      setErrorMsg("Por favor, digite o ano com 4 dígitos.");
       return;
     }
 
@@ -37,6 +45,8 @@ const CarForm = () => {
       Cor: newColor,
     };
     setTheCarList([...theCarList, newCar]);
+    // Limpar a mensagem de erro após adicionar o carro com sucesso
+    setErrorMsg("");
     // para que os campos de input fiquem vazios após a inserção do novo carro na lista:
     setNewName("");
     setNewBrand("");
@@ -46,7 +56,7 @@ const CarForm = () => {
 
   function deleteCar(id) {
     const newList = theCarList.filter((car) => car.id !== id);
-    // Reorganiza os idss da lista após excluir um carro
+    // Reorganiza os ids da lista após excluir um carro
     const updatedList = newList.map((car, index) => ({
       ...car,
       id: index + 1,
@@ -128,6 +138,7 @@ const CarForm = () => {
               <label>Ano: </label>
               <input
                 type="text"
+                // placeholder="ex: 2004"
                 value={newYear}
                 onChange={(e) => setNewYear(e.target.value)}
                 className="form-control form-control-lg"
@@ -143,7 +154,13 @@ const CarForm = () => {
                 className="form-control form-control-lg"
               />
             </div>
+            {errorMsg && (
+              <div className="col alert alert-warning mt-2" role="alert">
+                {errorMsg}
+              </div>
+            )}
           </div>
+
           {/* Botão para adicionar o carro na lista */}
           <div className="row-auto d-flex justify-content-center mt-2">
             <button onClick={addCar} className="btn btn-lg btn-dark">

@@ -25,7 +25,9 @@ const CarForm = () => {
     }
 
     if (!/^\d{4}$/.test(newYear)) {
-      setErrorMsg("Por favor, digite o ano com 4 dígitos.");
+      setErrorMsg(
+        "Por favor, digite o ano com 4 dígitos. Somente números permitidos."
+      );
       return;
     }
 
@@ -119,7 +121,7 @@ const CarForm = () => {
               <input
                 type="text"
                 value={newName}
-                onChange={(e) => setNewName(e.target.value)}
+                onChange={(e) => setNewName(e.target.value.trim())}
                 className="form-control form-control-lg"
               />
             </div>
@@ -129,7 +131,7 @@ const CarForm = () => {
               <input
                 type="text"
                 value={newBrand}
-                onChange={(e) => setNewBrand(e.target.value)}
+                onChange={(e) => setNewBrand(e.target.value.trim())}
                 className="form-control form-control-lg"
               />
             </div>
@@ -140,7 +142,7 @@ const CarForm = () => {
                 type="text"
                 // placeholder="ex: 2004"
                 value={newYear}
-                onChange={(e) => setNewYear(e.target.value)}
+                onChange={(e) => setNewYear(e.target.value.trim())}
                 className="form-control form-control-lg"
               />
             </div>
@@ -150,7 +152,7 @@ const CarForm = () => {
               <input
                 type="text"
                 value={newColor}
-                onChange={(e) => setNewColor(e.target.value)}
+                onChange={(e) => setNewColor(e.target.value.trim())}
                 className="form-control form-control-lg"
               />
             </div>
@@ -232,7 +234,7 @@ const CarForm = () => {
                 <input
                   type="text"
                   value={newName}
-                  onChange={(e) => setNewName(e.target.value)}
+                  onChange={(e) => setNewName(e.target.value.trim())}
                   className="form-control"
                 />
               </div>
@@ -241,7 +243,7 @@ const CarForm = () => {
                 <input
                   type="text"
                   value={newBrand}
-                  onChange={(e) => setNewBrand(e.target.value)}
+                  onChange={(e) => setNewBrand(e.target.value.trim())}
                   className="form-control"
                 />
               </div>
@@ -250,7 +252,7 @@ const CarForm = () => {
                 <input
                   type="text"
                   value={newYear}
-                  onChange={(e) => setNewYear(e.target.value)}
+                  onChange={(e) => setNewYear(e.target.value.trim())}
                   className="form-control"
                 />
               </div>
@@ -259,7 +261,7 @@ const CarForm = () => {
                 <input
                   type="text"
                   value={newColor}
-                  onChange={(e) => setNewColor(e.target.value)}
+                  onChange={(e) => setNewColor(e.target.value.trim())}
                   className="form-control"
                 />
               </div>

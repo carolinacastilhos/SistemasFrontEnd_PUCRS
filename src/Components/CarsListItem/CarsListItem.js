@@ -10,32 +10,13 @@ export default function CarListItem() {
   const [theCarList, setTheCarList] = useState([...cars]); //Cópia da Lista de Carros do carsData
   const [selectedCar, setSelectedCar] = useState(null); // Estado para controlar qual carro está selecionado ao abrir o modal CarDetail
   const [isModalOpen, setIsModalOpen] = useState(false); // Estado para controlar se o modal está aberto
+  const [newId, setNewId] = useState("");
   const [newName, setNewName] = useState("");
   const [newBrand, setNewBrand] = useState("");
   const [newYear, setNewYear] = useState("");
   const [newColor, setNewColor] = useState("");
   const [editingCar, setEditingCar] = useState(null);
   const [isOpen, setIsOpen] = useState(false); // Estado para controlar a abertura do pop-up de edição
-
-  //   function deleteCar(id) {
-  //     const newList = theCarList.filter((car) => car.id !== id);
-  //     // Reorganiza os ids da lista após excluir um carro
-  //     const updatedList = newList.map((car, index) => ({
-  //       ...car,
-  //       id: index + 1,
-  //     }));
-  //     setTheCarList(updatedList);
-  //   }
-
-  //   const handleCarClick = (car) => {
-  //     setSelectedCar(car);
-  //     setIsModalOpen(true);
-  //   };
-
-  //   const handleDeleteCar = (id) => {
-  //     // Evitar a propagação do evento para não acionar o handleCarClick ao clicar no ícone faTrashCan
-  //     deleteCar(id);
-  //   };
 
   function deleteCar(id) {
     const newList = theCarList.filter((car) => car.id !== id);
@@ -45,11 +26,17 @@ export default function CarListItem() {
       id: index + 1,
     }));
     setTheCarList(updatedList);
-    setNewName("");
-    setNewBrand("");
-    setNewYear("");
-    setNewColor("");
   }
+
+  const handleCarClick = (car) => {
+    setSelectedCar(car);
+    setIsModalOpen(true);
+  };
+
+  const handleDeleteCar = (id) => {
+    // Evitar a propagação do evento para não acionar o handleCarClick ao clicar no ícone faTrashCan
+    deleteCar(id);
+  };
 
   function editCar(c) {
     setEditingCar(c);
@@ -60,6 +47,11 @@ export default function CarListItem() {
     setNewYear(c.Ano);
     setNewColor(c.Cor);
   }
+
+  const handleEditedCar = (id) => {
+    // Evitar a propagação do evento para não acionar o handleCarClick ao clicar no ícone faPen
+    editCar(id);
+  };
 
   function saveEditedCar() {
     const editedList = theCarList.map((car) =>
@@ -101,31 +93,6 @@ export default function CarListItem() {
       {theCarList.map((c) => (
         //está consumindo os dados da cars e transformando em uma lista visual com cada tópico
         <div className="row">
-          <div className="col">
-            <span className="px-3">
-              {c.id}: {c.Nome}, {c.Marca}, {c.Ano}, {c.Cor}
-            </span>
-            <span
-              title="edit"
-              className="px-3"
-              onClick={() => editCar(c)}
-              style={{ cursor: "pointer" }}
-            >
-              <FontAwesomeIcon icon={faPen} />
-            </span>
-            <span
-              title="delete"
-              onClick={() => deleteCar(c.id)}
-              style={{ cursor: "pointer" }}
-            >
-              <FontAwesomeIcon icon={faTrashCan} />
-            </span>
-          </div>
-        </div>
-      ))}
-
-      {/* {theCarList.map((c) => (
-        <div className="row">
           <div
             className="col"
             onClick={() => handleCarClick(c)}
@@ -133,6 +100,17 @@ export default function CarListItem() {
           >
             <span className="px-3">
               {c.id}: {c.Nome}, {c.Marca}, {c.Ano}, {c.Cor}
+            </span>
+            <span
+              title="edit"
+              className="px-3"
+              onClick={(e) => {
+                e.stopPropagation();
+                handleEditedCar(c.id);
+              }}
+              style={{ cursor: "pointer" }}
+            >
+              <FontAwesomeIcon icon={faPen} />
             </span>
             <span
               title="delete"
@@ -146,7 +124,7 @@ export default function CarListItem() {
             </span>
           </div>
         </div>
-      ))} */}
+      ))}
 
       <div
         className={`modal fade ${isOpen ? "show" : ""}`}

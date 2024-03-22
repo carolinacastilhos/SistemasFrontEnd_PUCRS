@@ -26,7 +26,7 @@ const CarFormItem = () => {
 
     if (!/^\d{4}$/.test(newYear)) {
       setErrorMsg(
-        "Por favor, digite o ano com 4 dígitos. Somente números permitidos."
+        "Por favor, digite o ano com 4 dígitos. Permitido somente números."
       );
       return;
     }

@@ -3,11 +3,11 @@ import ReactDOM from "react-dom/client";
 import "./index.css";
 import App from "./App";
 import reportWebVitals from "./reportWebVitals";
-import Home from "./Components/Home/Home";
-import CarForm from "./Components/CarForm/CarForm";
-import CarList from "./Components/CarsList/CarList";
-import About from "./Components/About/About";
-import NotFound from "./Components/NotFound/NotFound";
+import Home from "./Pages/Home/Home";
+import CarForm from "./Pages/CarForm/CarForm";
+import CarList from "./Pages/CarsList/CarList";
+import About from "./Pages/About/About";
+import NotFound from "./Pages/NotFound/NotFound";
 
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 

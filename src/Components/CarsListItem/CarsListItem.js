@@ -10,10 +10,22 @@ import "./CarsListItem.module.css";
 
 export default function CarListItem() {
   const { data, error } = useApi("http://localhost:5000/cars");
+  const [selectedCar, setSelectedCar] = useState(null); // Estado para controlar qual carro está selecionado ao abrir o modal CarDetail
+  const [isModalOpen, setIsModalOpen] = useState(false); // Estado para controlar se o modal está aberto
 
   if (error) {
     return <div>{error}</div>;
   }
+
+  const handleCarClick = (car) => {
+    setSelectedCar(car);
+    setIsModalOpen(true);
+  };
+
+  const handleCloseModal = () => {
+    setIsModalOpen(false);
+    setSelectedCar(null); // Limpa o carro selecionado quando o modal é fechado
+  };
 
   return (
     <div className="containerList d-flex justify-content-center align-items-center flex-column m-4">
@@ -22,19 +34,78 @@ export default function CarListItem() {
         <ul className="list-group list-group-flush">
           {data.map((c) => (
             <li className="list-group-item" key={c.id}>
-              <b>
-                {c.id}: {c.name}
-              </b>
-              , {c.brand}, {c.color}, {c.year}
+              <span
+                onClick={() => handleCarClick(c)}
+                style={{ cursor: "pointer" }}
+              >
+                <b>
+                  {c.id}: {c.name}
+                </b>
+                , {c.brand}, {c.color}, {c.year}
+              </span>
+              <span
+                title="edit"
+                className="px-3"
+                // onClick={(e) => {
+                //   e.stopPropagation();
+                //   handleEditedCar(c.id);
+                // }}
+                style={{ cursor: "pointer" }}
+              >
+                <FontAwesomeIcon icon={faPen} />
+              </span>
+              <span
+                title="delete"
+                // onClick={(e) => {
+                //   e.stopPropagation();
+                //   handleDeleteCar(c.id);
+                // }}
+                style={{ cursor: "pointer" }}
+              >
+                <FontAwesomeIcon icon={faTrashCan} />
+              </span>
             </li>
           ))}
         </ul>
       </div>
+
+      {/* Modal do CarDetail */}
+      <div
+        className={`modal fade ${isModalOpen ? "show" : ""}`}
+        style={{ display: isModalOpen ? "block" : "none" }}
+        tabIndex="-1"
+        role="dialog"
+        aria-labelledby="carDetailModal"
+        aria-hidden={!isModalOpen}
+        onClick={handleCloseModal}
+      >
+        <div className="modal-dialog" role="document">
+          <div className="modal-content" onClick={(e) => e.stopPropagation()}>
+            <div className="modal-header">
+              <h5 className="modal-title">
+                Carro:{" "}
+                {selectedCar && `${selectedCar.id} - ${selectedCar.name} `}
+              </h5>
+              <button
+                type="button"
+                className="close"
+                data-dismiss="modal"
+                aria-label="Close"
+                onClick={handleCloseModal}
+              >
+                <span aria-hidden="true">&times;</span>
+              </button>
+            </div>
+            <div className="modal-body">
+              {selectedCar && <CarDetail car={selectedCar} />}
+            </div>
+          </div>
+        </div>
+      </div>
     </div>
   );
   // const [theCarList, setTheCarList] = useState([...cars]); //Cópia da Lista de Carros do carsData
-  // const [selectedCar, setSelectedCar] = useState(null); // Estado para controlar qual carro está selecionado ao abrir o modal CarDetail
-  // const [isModalOpen, setIsModalOpen] = useState(false); // Estado para controlar se o modal está aberto
+
   // const [newId, setNewId] = useState("");
   // const [newName, setNewName] = useState("");
   // const [newBrand, setNewBrand] = useState("");

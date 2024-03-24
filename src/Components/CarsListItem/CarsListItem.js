@@ -6,43 +6,30 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faTrashCan, faPen } from "@fortawesome/free-solid-svg-icons";
 import CarDetail from "../CarDetail/CarDetail";
 import useApi from "../../Hooks/useApi";
+import "./CarsListItem.module.css";
 
 export default function CarListItem() {
-  const { data, loading, error } = useApi("http://localhost:5000/cars");
+  const { data, error } = useApi("http://localhost:5000/cars");
 
-  // if (loading) {
-  //   console.log(data.user);
-  //   return (
-  //     <div className="progress">
-  //       <div
-  //         className="progress-bar bg-warning"
-  //         role="progressbar"
-  //         style="width: 75%"
-  //         aria-valuenow="75"
-  //         aria-valuemin="0"
-  //         aria-valuemax="100"
-  //       ></div>
-  //     </div>
-  //   );
-  // }
-
-  // if (error) {
-  //   return { error };
-  // }
+  if (error) {
+    return <div>{error}</div>;
+  }
 
   return (
     <div className="containerList d-flex justify-content-center align-items-center flex-column m-4">
       <h1>Lista de Carros</h1>
-      <ul>
-        {data.map((c) => (
-          <li key={c.id}>
-            <b>
-              {c.id}: {c.name}
-            </b>
-            , {c.brand}, {c.color}, {c.year}
-          </li>
-        ))}
-      </ul>
+      <div className="card">
+        <ul className="list-group list-group-flush">
+          {data.map((c) => (
+            <li className="list-group-item" key={c.id}>
+              <b>
+                {c.id}: {c.name}
+              </b>
+              , {c.brand}, {c.color}, {c.year}
+            </li>
+          ))}
+        </ul>
+      </div>
     </div>
   );
   // const [theCarList, setTheCarList] = useState([...cars]); //Cópia da Lista de Carros do carsData

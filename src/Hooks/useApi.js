@@ -3,7 +3,6 @@ import axios from "axios";
 
 const useApi = (url) => {
   const [data, setData] = useState([]);
-  const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
 
   useEffect(() => {
@@ -11,17 +10,15 @@ const useApi = (url) => {
       try {
         const response = await axios.get(url);
         setData(response.data);
-        setLoading(false);
       } catch (error) {
         setError("Erro ao carregar os dados.");
-        setLoading(false);
       }
     };
 
     fetchData();
   }, [url]);
 
-  return { data, loading, error };
+  return { data, error };
 };
 
 export default useApi;

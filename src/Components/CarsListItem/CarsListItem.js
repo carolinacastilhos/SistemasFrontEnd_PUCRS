@@ -1,12 +1,12 @@
 import React, { useState } from "react";
-import cars from "../../carsData";
+// import cars from "../../carsData";
 import "bootstrap/dist/css/bootstrap.min.css";
-import "./CarsListItem.module.css";
+// import "./CarsListItem.module.css";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faTrashCan, faPen } from "@fortawesome/free-solid-svg-icons";
+import { faTrashCan, faPen, faPlus } from "@fortawesome/free-solid-svg-icons";
 import CarDetail from "../CarDetail/CarDetail";
 import useApi from "../../Hooks/useApi";
-import "./CarsListItem.module.css";
+import { Link } from "react-router-dom";
 
 export default function CarListItem() {
   const { data, error } = useApi("http://localhost:5000/cars");
@@ -67,6 +67,13 @@ export default function CarListItem() {
             </li>
           ))}
         </ul>
+      </div>
+
+      {/* Botão para adicionar um carro na lista */}
+      <div className="row-auto d-flex justify-content-center mt-2">
+        <Link to="/carform" className="btn btn-lg btn-dark">
+          Adicionar <FontAwesomeIcon icon={faPlus} />
+        </Link>
       </div>
 
       {/* Modal do CarDetail */}

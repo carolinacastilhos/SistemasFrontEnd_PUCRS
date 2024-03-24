@@ -1,112 +1,44 @@
 import React, { useState } from "react";
-import cars from "../../carsData";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faTrashCan, faPen } from "@fortawesome/free-solid-svg-icons";
+import { useNavigate } from "react-router-dom";
+import useApi from "../../Hooks/useApi";
 import "bootstrap/dist/css/bootstrap.min.css";
 
-const CarFormItem = () => {
-  const [theCarList, setTheCarList] = useState([...cars]); //Cópia da Lista de Carros do carsData
-  const [newId, setNewId] = useState("");
-  const [newName, setNewName] = useState("");
-  const [newBrand, setNewBrand] = useState("");
-  const [newYear, setNewYear] = useState("");
-  const [newColor, setNewColor] = useState("");
-  const [editingCar, setEditingCar] = useState(null);
-  const [isOpen, setIsOpen] = useState(false); // Estado para controlar a abertura do pop-up de edição
-  const [errorMsg, setErrorMsg] = useState(""); // Estado para controlar a mensagem de validação
+function CarFormItem() {
+  const navigate = useNavigate();
+  const [isSaved, setIsSaved] = useState(false);
+  const { data, addCar } = useApi("http://localhost:5000/cars");
 
-  function addCar() {
-    // Verificação se todos os campos estão preenchidos antes de adicionar o carro
-    if (!newName || !newBrand || !newYear || !newColor) {
-      setErrorMsg(
-        "Por favor, preencha todos os campos antes de adicionar um carro."
-      );
-      return;
+  const [car, setCar] = useState(
+    data || {
+      name: "",
+      brand: "",
+      color: "",
+      year: "",
     }
+  );
 
-    if (!/^\d{4}$/.test(newYear)) {
-      setErrorMsg(
-        "Por favor, digite o ano com 4 dígitos. Permitido somente números."
-      );
-      return;
-    }
-
-    let newCarId = 1; // Definir o novo ID como 1 por padrão
-
-    if (theCarList.length > 0) {
-      // Se houver carros na lista, encontrar o maior ID atualmente na lista e adicionar 1
-      const maxId = Math.max(...theCarList.map((car) => car.id));
-      newCarId = maxId + 1;
-    }
-
-    const newCar = {
-      id: newCarId,
-      Nome: newName,
-      Marca: newBrand,
-      Ano: newYear,
-      Cor: newColor,
-    };
-    setTheCarList([...theCarList, newCar]);
-    // Limpar a mensagem de erro após adicionar o carro com sucesso
-    setErrorMsg("");
-    // para que os campos de input fiquem vazios após a inserção do novo carro na lista:
-    setNewName("");
-    setNewBrand("");
-    setNewYear("");
-    setNewColor("");
-  }
-
-  function deleteCar(id) {
-    const newList = theCarList.filter((car) => car.id !== id);
-    // Reorganiza os ids da lista após excluir um carro
-    const updatedList = newList.map((car, index) => ({
-      ...car,
-      id: index + 1,
+  const handleInputChange = (e) => {
+    const { name, value } = e.target;
+    setCar((prevState) => ({
+      ...prevState,
+      id: new Date().valueOf(),
+      [name]: value,
     }));
-    setTheCarList(updatedList);
-    setNewName("");
-    setNewBrand("");
-    setNewYear("");
-    setNewColor("");
-  }
+  };
 
-  function editCar(c) {
-    setEditingCar(c);
-    setIsOpen(true); // Abrir o modal ao clicar no ícone de edição
-    setNewId(c.id);
-    setNewName(c.Nome);
-    setNewBrand(c.Marca);
-    setNewYear(c.Ano);
-    setNewColor(c.Cor);
-  }
+  const handleSaveClick = () => {
+    addCar(car)
+      .then(() => {
+        setIsSaved(true);
+        navigate("/carlist");
+      })
+      .catch((error) => {
+        console.log(isSaved);
+      });
 
-  function saveEditedCar() {
-    const editedList = theCarList.map((car) =>
-      car.id === editingCar.id
-        ? {
-            ...car,
-            Nome: newName,
-            Marca: newBrand,
-            Ano: newYear,
-            Cor: newColor,
-          }
-        : car
-    );
-    setTheCarList(editedList);
-    setIsOpen(false); // Fechar o modal após salvar as alterações
-    setNewName("");
-    setNewBrand("");
-    setNewYear("");
-    setNewColor("");
-  }
-
-  function cancelEditing() {
-    setIsOpen(false);
-    setNewName("");
-    setNewBrand("");
-    setNewYear("");
-    setNewColor("");
-  }
+    setIsSaved(true);
+    navigate("/carlist");
+  };
 
   return (
     <div className="container d-flex justify-content-center align-items-center flex-column">
@@ -120,8 +52,9 @@ const CarFormItem = () => {
               <label>Modelo: </label>
               <input
                 type="text"
-                value={newName}
-                onChange={(e) => setNewName(e.target.value.trim())}
+                name="name"
+                value={car.name}
+                onChange={handleInputChange}
                 className="form-control form-control-lg"
               />
             </div>
@@ -130,8 +63,9 @@ const CarFormItem = () => {
               <label>Marca: </label>
               <input
                 type="text"
-                value={newBrand}
-                onChange={(e) => setNewBrand(e.target.value.trim())}
+                name="brand"
+                value={car.brand}
+                onChange={handleInputChange}
                 className="form-control form-control-lg"
               />
             </div>
@@ -140,9 +74,9 @@ const CarFormItem = () => {
               <label>Ano: </label>
               <input
                 type="text"
-                // placeholder="ex: 2004"
-                value={newYear}
-                onChange={(e) => setNewYear(e.target.value.trim())}
+                name="year"
+                value={car.year}
+                onChange={handleInputChange}
                 className="form-control form-control-lg"
               />
             </div>
@@ -151,28 +85,132 @@ const CarFormItem = () => {
               <label>Cor: </label>
               <input
                 type="text"
-                value={newColor}
-                onChange={(e) => setNewColor(e.target.value.trim())}
+                name="color"
+                value={car.color}
+                onChange={handleInputChange}
                 className="form-control form-control-lg"
               />
             </div>
-            {errorMsg && (
+            {/* {errorMsg && (
               <div className="col alert alert-warning mt-2" role="alert">
                 {errorMsg}
               </div>
-            )}
+            )} */}
           </div>
 
           {/* Botão para adicionar o carro na lista */}
           <div className="row-auto d-flex justify-content-center mt-2">
-            <button onClick={addCar} className="btn btn-lg btn-dark">
+            <button onClick={handleSaveClick} className="btn btn-lg btn-dark">
               Adicionar
             </button>
           </div>
         </div>
       </div>
+    </div>
+  );
+}
 
-      {/* Visualização da Lista de carros */}
+export default CarFormItem;
+
+// const [theCarList, setTheCarList] = useState([...cars]); //Cópia da Lista de Carros do carsData
+// const [newId, setNewId] = useState("");
+// const [newName, setNewName] = useState("");
+// const [newBrand, setNewBrand] = useState("");
+// const [newYear, setNewYear] = useState("");
+// const [newColor, setNewColor] = useState("");
+// const [editingCar, setEditingCar] = useState(null);
+// const [isOpen, setIsOpen] = useState(false); // Estado para controlar a abertura do pop-up de edição
+// const [errorMsg, setErrorMsg] = useState(""); // Estado para controlar a mensagem de validação
+
+// Verificação se todos os campos estão preenchidos antes de adicionar o carro
+// if (!newName || !newBrand || !newYear || !newColor) {
+//   setErrorMsg(
+//     "Por favor, preencha todos os campos antes de adicionar um carro."
+//   );
+//   return;
+// }
+// if (!/^\d{4}$/.test(newYear)) {
+//   setErrorMsg(
+//     "Por favor, digite o ano com 4 dígitos. Permitido somente números."
+//   );
+//   return;
+// }
+// let newCarId = 1; // Definir o novo ID como 1 por padrão
+// if (theCarList.length > 0) {
+//   // Se houver carros na lista, encontrar o maior ID atualmente na lista e adicionar 1
+//   const maxId = Math.max(...theCarList.map((car) => car.id));
+//   newCarId = maxId + 1;
+// }
+// const newCar = {
+//   id: newCarId,
+//   Nome: newName,
+//   Marca: newBrand,
+//   Ano: newYear,
+//   Cor: newColor,
+// };
+// setTheCarList([...theCarList, newCar]);
+// // Limpar a mensagem de erro após adicionar o carro com sucesso
+// setErrorMsg("");
+// // para que os campos de input fiquem vazios após a inserção do novo carro na lista:
+// setNewName("");
+// setNewBrand("");
+// setNewYear("");
+// setNewColor("");
+
+// function deleteCar(id) {
+//   const newList = theCarList.filter((car) => car.id !== id);
+//   // Reorganiza os ids da lista após excluir um carro
+//   const updatedList = newList.map((car, index) => ({
+//     ...car,
+//     id: index + 1,
+//   }));
+//   setTheCarList(updatedList);
+//   setNewName("");
+//   setNewBrand("");
+//   setNewYear("");
+//   setNewColor("");
+// }
+
+// function editCar(c) {
+//   setEditingCar(c);
+//   setIsOpen(true); // Abrir o modal ao clicar no ícone de edição
+//   setNewId(c.id);
+//   setNewName(c.Nome);
+//   setNewBrand(c.Marca);
+//   setNewYear(c.Ano);
+//   setNewColor(c.Cor);
+// }
+
+// function saveEditedCar() {
+//   const editedList = theCarList.map((car) =>
+//     car.id === editingCar.id
+//       ? {
+//           ...car,
+//           Nome: newName,
+//           Marca: newBrand,
+//           Ano: newYear,
+//           Cor: newColor,
+//         }
+//       : car
+//   );
+//   setTheCarList(editedList);
+//   setIsOpen(false); // Fechar o modal após salvar as alterações
+//   setNewName("");
+//   setNewBrand("");
+//   setNewYear("");
+//   setNewColor("");
+// }
+
+// function cancelEditing() {
+//   setIsOpen(false);
+//   setNewName("");
+//   setNewBrand("");
+//   setNewYear("");
+//   setNewColor("");
+// }
+
+{
+  /* Visualização da Lista de carros
       <div className="containerList">
         <h1>Lista de Carros</h1>
         {theCarList.map((c) => (
@@ -201,9 +239,11 @@ const CarFormItem = () => {
             </div>
           </div>
         ))}
-      </div>
+      </div> */
+}
 
-      <div
+{
+  /* <div
         className={`modal fade ${isOpen ? "show" : ""}`}
         style={{ display: isOpen ? "block" : "none" }}
         tabIndex="-1"
@@ -227,9 +267,14 @@ const CarFormItem = () => {
                 <span aria-hidden="true">&times;</span>
               </button>
             </div>
-            <div className="modal-body">
-              {/* Inputs para editar carro */}
-              <div className="form-group">
+            <div className="modal-body"> */
+}
+
+{
+  /* Inputs para editar carro */
+}
+{
+  /* <div className="form-group">
                 <label>Modelo:</label>
                 <input
                   type="text"
@@ -285,9 +330,5 @@ const CarFormItem = () => {
             </div>
           </div>
         </div>
-      </div>
-    </div>
-  );
-};
-
-export default CarFormItem;
+      </div> */
+}

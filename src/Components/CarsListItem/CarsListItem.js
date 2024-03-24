@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 // import cars from "../../carsData";
 import "bootstrap/dist/css/bootstrap.min.css";
 // import "./CarsListItem.module.css";
@@ -9,13 +9,33 @@ import useApi from "../../Hooks/useApi";
 import { Link } from "react-router-dom";
 
 export default function CarListItem() {
-  const { data, error } = useApi("http://localhost:5000/cars");
+  const { getAllCars, deleteCar } = useApi();
   const [selectedCar, setSelectedCar] = useState(null); // Estado para controlar qual carro está selecionado ao abrir o modal CarDetail
   const [isModalOpen, setIsModalOpen] = useState(false); // Estado para controlar se o modal está aberto
+  const [cars, setCars] = useState([]);
 
-  if (error) {
-    return <div>{error}</div>;
-  }
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const data = await getAllCars();
+        setCars(data);
+        console.log(data);
+      } catch (error) {
+        console.log("Error fetching cars:", error);
+      }
+    };
+
+    fetchData();
+  }, []);
+
+  const handleDeleteCar = async (id) => {
+    try {
+      await deleteCar(id);
+      setCars((prevCars) => prevCars.filter((car) => car.id !== id));
+    } catch (error) {
+      console.log("Error deleting car:", error);
+    }
+  };
 
   const handleCarClick = (car) => {
     setSelectedCar(car);
@@ -32,7 +52,7 @@ export default function CarListItem() {
       <h1>Lista de Carros</h1>
       <div className="card">
         <ul className="list-group list-group-flush">
-          {data.map((c) => (
+          {cars.map((c) => (
             <li className="list-group-item" key={c.id}>
               <span
                 onClick={() => handleCarClick(c)}
@@ -56,10 +76,10 @@ export default function CarListItem() {
               </span>
               <span
                 title="delete"
-                // onClick={(e) => {
-                //   e.stopPropagation();
-                //   handleDeleteCar(c.id);
-                // }}
+                onClick={(e) => {
+                  e.stopPropagation();
+                  handleDeleteCar(c.id);
+                }}
                 style={{ cursor: "pointer" }}
               >
                 <FontAwesomeIcon icon={faTrashCan} />

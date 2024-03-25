@@ -7,6 +7,7 @@ function CarFormItem() {
   const navigate = useNavigate();
   const [isSaved, setIsSaved] = useState(false);
   const { data, addCar } = useApi("http://localhost:5000/cars");
+  const [errorMsg, setErrorMsg] = useState("");
 
   const [car, setCar] = useState(
     data || {
@@ -27,6 +28,20 @@ function CarFormItem() {
   };
 
   const handleSaveClick = () => {
+    if (!car.name || !car.brand || !car.year || !car.color) {
+      setErrorMsg(
+        "Por favor, preencha todos os campos antes de adicionar um carro."
+      );
+      return;
+    }
+
+    if (!/^\d{4}$/.test(car.year)) {
+      setErrorMsg(
+        "Por favor, digite o ano com 4 dígitos. Permitido somente números."
+      );
+      return;
+    }
+
     addCar(car)
       .then(() => {
         setIsSaved(true);
@@ -36,7 +51,6 @@ function CarFormItem() {
         console.log(isSaved);
       });
 
-    setIsSaved(true);
     navigate("/carlist");
   };
 
@@ -91,11 +105,11 @@ function CarFormItem() {
                 className="form-control form-control-lg"
               />
             </div>
-            {/* {errorMsg && (
+            {errorMsg && (
               <div className="col alert alert-warning mt-2" role="alert">
                 {errorMsg}
               </div>
-            )} */}
+            )}
           </div>
 
           {/* Botão para adicionar o carro na lista */}

@@ -10,7 +10,7 @@ const useApi = () => {
     }
   };
 
-  //   const updateCar = async (postcard) => {
+  //   const updateCar = async (car) => {
   //   try {
   //     await axios.put(`http://localhost:5000/cars/${car.id}`, car);
   //   } catch (error) {

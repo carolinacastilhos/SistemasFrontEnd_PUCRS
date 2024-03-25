@@ -23,7 +23,7 @@ function CarFormItem() {
     setCar((prevState) => ({
       ...prevState,
       id: new Date().valueOf(),
-      [name]: value,
+      [name]: value.trim(),
     }));
   };
 

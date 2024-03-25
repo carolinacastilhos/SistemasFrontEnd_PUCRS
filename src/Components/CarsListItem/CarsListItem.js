@@ -1,7 +1,5 @@
 import React, { useState, useEffect } from "react";
-// import cars from "../../carsData";
 import "bootstrap/dist/css/bootstrap.min.css";
-// import "./CarsListItem.module.css";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faTrashCan, faPen, faPlus } from "@fortawesome/free-solid-svg-icons";
 import CarDetail from "../CarDetail/CarDetail";
@@ -58,12 +56,9 @@ export default function CarListItem() {
                 onClick={() => handleCarClick(c)}
                 style={{ cursor: "pointer" }}
               >
-                <b>
-                  {c.id}: {c.name}
-                </b>
-                , {c.brand}, {c.color}, {c.year}
+                <b>{c.name}:</b> {c.brand}, {c.color}, {c.year}
               </span>
-              <span
+              {/* <span
                 title="edit"
                 className="px-3"
                 // onClick={(e) => {
@@ -73,9 +68,10 @@ export default function CarListItem() {
                 style={{ cursor: "pointer" }}
               >
                 <FontAwesomeIcon icon={faPen} />
-              </span>
+              </span> */}
               <span
                 title="delete"
+                className="px-3"
                 onClick={(e) => {
                   e.stopPropagation();
                   handleDeleteCar(c.id);
@@ -131,7 +127,6 @@ export default function CarListItem() {
       </div>
     </div>
   );
-  // const [theCarList, setTheCarList] = useState([...cars]); //Cópia da Lista de Carros do carsData
 
   // const [newId, setNewId] = useState("");
   // const [newName, setNewName] = useState("");
